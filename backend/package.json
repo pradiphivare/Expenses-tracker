@@ -1,0 +1,13 @@
+{
+  "name": "expenses-backend",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
