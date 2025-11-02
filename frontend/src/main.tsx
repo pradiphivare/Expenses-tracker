@@ -1,7 +1,10 @@
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
 
 createRoot(document.getElementById('root')!).render(
-  <h1 style={{ color: 'limegreen', textAlign: 'center' }}>
-    ✅ React is rendering!
-  </h1>
+  <StrictMode>
+    <App />
+  </StrictMode>
 );

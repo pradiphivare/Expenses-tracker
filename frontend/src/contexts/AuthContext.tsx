@@ -22,10 +22,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
-        setUser(session?.user ?? null);
-      })();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -41,9 +41,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
 
       if (data.user) {
+        // Use UPSERT to avoid duplicate key errors
         const { error: profileError } = await supabase
           .from('profiles')
-          .insert({
+          .upsert({
             id: data.user.id,
             email: data.user.email!,
             full_name: fullName,
@@ -51,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (profileError) throw profileError;
 
+        // Add default categories for new users
         const defaultCategories = [
           { name: 'Salary', type: 'income', color: '#10B981' },
           { name: 'Freelance', type: 'income', color: '#3B82F6' },
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { error: null };
     } catch (error) {
+      console.error('Sign up error:', error);
       return { error: error as Error };
     }
   };
@@ -85,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) throw error;
       return { error: null };
     } catch (error) {
+      console.error('Sign in error:', error);
       return { error: error as Error };
     }
   };
